@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum RoomType {
+  Private_room @map("Private room")
+  Entire_home  @map("Entire home/apt")
+  Shared_room  @map("Shared room")
+}
+
+model User {
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  email     String     @unique
+  wishlists Wishlist[]
+}
+
+model Wishlist {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+  roomId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id])
+  room   Room   @relation(fields: [roomId], references: [id])
+}
+
+model Room {
+  id                   String     @id @default(auto()) @map("_id") @db.ObjectId
+  name                 String?
+  listing_url          String?
+  xl_picture_url       String?
+  medium_url           String?
+  room_type            RoomType
+  smart_location       String?
+  guests_included      Int?
+  bedrooms             Int?
+  beds                 Int?
+  bathrooms            Int?
+  review_scores_rating Int?
+  number_of_reviews    Int?
+  host_picture_url     String?
+  host_name            String?
+  host_since           String?
+  description          String?
+  price                Int?
+  latitude             String?
+  longitude            String?
+  Wishlist             Wishlist[]
+}
