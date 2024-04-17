@@ -80,3 +80,37 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(roomsWithLove);
 }
+
+export async function POST(request: NextRequest) {
+    const data = await request.json();
+    const { name, listing_url, xl_picture_url, medium_url, room_type, smart_location, guests_included, bedrooms, beds, bathrooms, review_scores_rating, number_of_reviews, host_picture_url, host_name, host_since, description, price, latitude, longitude } = data;
+
+    const room = await db.room.create({
+        data: {
+            name,
+            listing_url,
+            xl_picture_url,
+            medium_url,
+            room_type,
+            smart_location,
+            guests_included,
+            bedrooms,
+            beds,
+            bathrooms,
+            review_scores_rating,
+            number_of_reviews,
+            host_picture_url,
+            host_name,
+            host_since,
+            description,
+            price,
+            latitude,
+            longitude
+        }
+    });
+
+    return NextResponse.json({
+        message: "Room created successfully",
+        room
+    });
+}
