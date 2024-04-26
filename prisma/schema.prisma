@@ -15,15 +15,18 @@ datasource db {
 }
 
 enum RoomType {
-  Private_room @map("Private room")
-  Entire_home  @map("Entire home/apt")
-  Shared_room  @map("Shared room")
+  ALL         @map("All")
+  INDIVIDUALS @map("Individuals")
+  GROUPS      @map("Groups")
 }
 
 model User {
   id        String     @id @default(auto()) @map("_id") @db.ObjectId
   email     String     @unique
   wishlists Wishlist[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Wishlist {
@@ -32,6 +35,9 @@ model Wishlist {
   roomId String @db.ObjectId
   user   User   @relation(fields: [userId], references: [id])
   room   Room   @relation(fields: [roomId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Room {
@@ -56,4 +62,7 @@ model Room {
   latitude             String?
   longitude            String?
   Wishlist             Wishlist[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
